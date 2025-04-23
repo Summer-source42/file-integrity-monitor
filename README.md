@@ -32,27 +32,42 @@ The script checks hash changes for specific files or scans directories recursive
 ### 🔧 Setup
 
 1. **Install PowerShell**:
-   Ensure that **PowerShell** is installed and configured on your Windows machine. PowerShell is essential for automating the file integrity monitoring script.
+   Ensure that **PowerShell** is installed and configured on your Windows machine.
 
 2. **Create Monitoring Directory**:
-   Choose a directory to monitor. For example, `C:\Users\Public\Documents`.
+   Choose or create a directory that you want to monitor for file integrity. For example, create a folder named `Files` inside your project directory (`C:\FileMonitoring\Files`).
 
 3. **Download or Create the Monitoring Script**:
-   Download the monitoring script from this [link to PowerShell script](/Windows/FIM.ps1). The script tracks file creation, modification, and deletion events in real-time, using **SHA-256 hashing** for verification.
+   Download the PowerShell monitoring script from this [link to PowerShell script](/Windows/FIM.ps1). This script will monitor files in the specified directory and track any changes based on their SHA-512 hashes.
 
-4. **Configure Logging Path**:
-   Set up a directory for storing log files, such as `C:\FIM\logs\file_change_log.txt`.
+4. **Configure Baseline File**:
+   - The script begins by creating a baseline of file hashes. This baseline is stored in a file called `baseline.txt`. If the file already exists, it will be erased to create a new one.
+   - If you choose to collect a new baseline (`A`), the script will calculate the hash of each file in the `Files` folder and save it to `baseline.txt`.
 
 5. **Run the Script**:
    - Open **PowerShell** as Administrator.
-   - Navigate to the directory containing the script.
-   - Run the script with the following command:
+   - Navigate to the directory where you saved the script (`monitor.ps1`).
+   - Run the script by executing:
      ```powershell
      .\monitor.ps1
      ```
-   - The script will now continuously monitor the specified directory and log any changes to the defined log file.
 
-6. **Automate the Script**:
+   When prompted, you can choose to either:
+   - **A**: Collect a new baseline (this will calculate and store the hash of each file in `baseline.txt`).
+   - **B**: Begin monitoring files using the previously saved baseline.
+
+6. **Monitor Files**:
+   After choosing **B** to begin monitoring, the script will continuously check the files in the `Files` folder for any changes. It will notify you if:
+   - A new file is created.
+   - An existing file has been changed (hash mismatch).
+   - A file from the baseline has been deleted.
+
+   The script will notify you of these changes in real-time via the console with color-coded alerts:
+   - Green: A new file has been created.
+   - Yellow: A file has been changed.
+   - Dark Red: A file has been deleted.
+
+7. **Automate the Script**:
    For continuous monitoring, schedule the PowerShell script to run at regular intervals using **Windows Task Scheduler**:
    - Open **Task Scheduler** and create a new task.
    - Set the task to run the PowerShell script at your desired frequency (e.g., daily, weekly).
