@@ -2,7 +2,7 @@
 
 This project demonstrates how to implement a **File Integrity Monitoring** (FIM) system on both Windows and Linux using native scripting. It helps detect unauthorized file changes and supports basic real-time alerting and forensic investigation — especially useful for personal labs and lightweight endpoint monitoring.
 
----
+
 
 ## 📌 Project Objective
 
@@ -11,7 +11,7 @@ This project demonstrates how to implement a **File Integrity Monitoring** (FIM)
 - Log suspicious changes for audit or further analysis.
 - Practice log collection, automation, and response scripting.
 
----
+
 
 ## 🛠️ Tools & Technologies
 
@@ -20,17 +20,43 @@ This project demonstrates how to implement a **File Integrity Monitoring** (FIM)
 - **Event Viewer** (Windows) / **Syslog** (Linux)
 - Optional: **Splunk**, **ELK Stack**, or any SIEM for centralized logging and analysis
 
----
+
+
+## 🖥️ File Monitoring Logic
+
+The script checks hash changes for specific files or scans directories recursively. When a change is detected, it logs the details locally and (optionally) sends alerts.
+
 
 ## 🪟 File Monitoring on Windows
 
 ### 🔧 Setup
 
-1. Place the `monitor.ps1` script under `C:\FIM\` or your preferred directory.
-2. Use **Task Scheduler** to run the script periodically (e.g., every 5 minutes).
-3. Ensure script execution policy is set to allow:
-   ```powershell
-   Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+1. **Install PowerShell**:
+   Ensure that **PowerShell** is installed and configured on your Windows machine. PowerShell is essential for automating the file integrity monitoring script.
+
+2. **Create Monitoring Directory**:
+   Choose a directory to monitor. For example, `C:\Users\Public\Documents`.
+
+3. **Download or Create the Monitoring Script**:
+   Download the monitoring script from this [link to PowerShell script](/Windows/FIM.ps1). The script tracks file creation, modification, and deletion events in real-time, using **SHA-256 hashing** for verification.
+
+4. **Configure Logging Path**:
+   Set up a directory for storing log files, such as `C:\FIM\logs\file_change_log.txt`.
+
+5. **Run the Script**:
+   - Open **PowerShell** as Administrator.
+   - Navigate to the directory containing the script.
+   - Run the script with the following command:
+     ```powershell
+     .\monitor.ps1
+     ```
+   - The script will now continuously monitor the specified directory and log any changes to the defined log file.
+
+6. **Automate the Script**:
+   For continuous monitoring, schedule the PowerShell script to run at regular intervals using **Windows Task Scheduler**:
+   - Open **Task Scheduler** and create a new task.
+   - Set the task to run the PowerShell script at your desired frequency (e.g., daily, weekly).
+   - You can refer to the [Task Scheduler setup guide](YOUR_LINK_HERE) for more details.
 
 ---
 ## 📊 Sample Output
